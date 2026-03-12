@@ -203,8 +203,6 @@ Application Access
 
 Users access the application through the proxy server:
 
-http://13.208.241.151/student
-
 Direct access to the backend server is blocked.
 
 Security Implementation

@@ -128,7 +128,8 @@ Student List Screenshot
 
 <img width="1916" height="959" alt="student data fill" src="https://github.com/user-attachments/assets/27d65a7f-8113-41ea-9232-13fd0215f099" />
 
-Step 7 – Amazon RDS Database Setup
+
+# Step 7 – Amazon RDS Database Setup
 
 Amazon RDS MySQL database was created to store the student data.
 

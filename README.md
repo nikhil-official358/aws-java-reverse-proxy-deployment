@@ -1,4 +1,4 @@
-Java Application Deployment with Reverse Proxy on AWS
+# Java Application Deployment with Reverse Proxy on AWS
 Project Overview
 
 This project demonstrates how to deploy a Java-based Student Registration Web Application on AWS using a Reverse Proxy Architecture.
@@ -7,7 +7,7 @@ In many traditional systems, backend servers are directly exposed to the interne
 
 The backend application runs on Apache Tomcat, the proxy server runs Nginx, and the student data is stored in Amazon RDS MySQL.
 
-Architecture
+# Architecture
 
 User Browser
 ↓
@@ -31,7 +31,7 @@ Student data is stored in Amazon RDS database
 
 Response is returned to the user
 
-Step 1 – EC2 Infrastructure Setup
+# Step 1 – EC2 Infrastructure Setup
 
 Two EC2 instances were created.
 
@@ -46,7 +46,7 @@ EC2 Instances Screenshot
 
 <img width="1917" height="909" alt="intances" src="https://github.com/user-attachments/assets/d0bdfebb-b80c-4443-a028-ee4056f9d03f" />
 
-Step 2 – Security Group Configuration
+# Step 2 – Security Group Configuration
 
 Security groups were configured to secure the backend server.
 
@@ -65,7 +65,7 @@ Security Group Screenshot:
 backend security group
 <img width="1910" height="906" alt="backend sg" src="https://github.com/user-attachments/assets/dac1ca74-21a7-40cb-8e5d-adae3cb04811" />
 
-Step 3 – Apache Tomcat Installation
+# Step 3 – Apache Tomcat Installation
 
 Apache Tomcat was installed on the backend EC2 instance to host the Java application.
 
@@ -87,7 +87,7 @@ sudo /opt/tomcat/bin/startup.sh
 Tomcat Running Screenshot
 <img width="1920" height="1020" alt="tomcat" src="https://github.com/user-attachments/assets/a09c9e19-d0b5-4655-96e6-a1bf202cdfb6" />
 
-Step 4 – Deploy Java Application
+# Step 4 – Deploy Java Application
 
 The Java web application (student.war) was deployed inside the Tomcat webapps directory.
 
@@ -96,7 +96,7 @@ Student Registration Form
 ![Student Registration Form](screenshots/student-form.png)
 
 <img width="1920" height="1020" alt="student registration form" src="https://github.com/user-attachments/assets/454f0814-b840-4b75-83d6-a0b4be73d045" />
-Step 5 – Student Data Submission
+# Step 5 – Student Data Submission
 
 Users can enter student details in the form and submit them to the backend application.
 
@@ -119,7 +119,7 @@ Form Filled Screenshot:
 
 
 
-Step 6 – Display Student Data
+# Step 6 – Display Student Data
 
 After submission, the application retrieves the stored data from the database and displays it on the web page.
 
@@ -140,7 +140,7 @@ Database Name: studentdb
 RDS Database Screenshot:
 <img width="1920" height="1020" alt="rds database" src="https://github.com/user-attachments/assets/239e83fb-223b-4152-836e-1934147f2bae" />
 
-Step 8 – Database Creation
+# Step 8 – Database Creation
 
 The database and student table were created using SQL.
 
@@ -159,7 +159,7 @@ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 Database Creation Screenshot
 <img width="1625" height="967" alt="Screenshot 2026-03-12 152633" src="https://github.com/user-attachments/assets/8c43e763-973b-4439-9c32-9c8888e2fc9d" />
 
-Step 9 – Database Records
+# Step 9 – Database Records
 
 After submitting the form, the records are successfully stored in the MySQL database.
 
@@ -167,7 +167,7 @@ MySQL Table Screenshot:
 
 <img width="1495" height="963" alt="mysdl db" src="https://github.com/user-attachments/assets/ed100e64-2e2e-4cae-834a-ec706ebffde0" />
 
-Step 10 – MySQL Connector Setup
+# Step 10 – MySQL Connector Setup
 
 The MySQL JDBC connector was added to the Tomcat library directory to enable database connectivity.
 
@@ -178,7 +178,7 @@ MySQL Connector Screenshot:
 
 <img width="1920" height="1020" alt="jar file" src="https://github.com/user-attachments/assets/89d4700e-8e23-4eff-b715-c9a39ba5c5b7" />
 
-Step 11 – Reverse Proxy Configuration
+# Step 11 – Reverse Proxy Configuration
 
 Nginx was installed on the proxy server to forward traffic to the backend server.
 
@@ -217,7 +217,7 @@ Security groups restrict direct access
 
 Database secured inside AWS network
 
-Conclusion
+# Conclusion
 
 This project demonstrates secure deployment of a Java web application using a reverse proxy architecture on AWS.
 

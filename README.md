@@ -1,155 +1,80 @@
 Java Application Deployment with Reverse Proxy on AWS
 Project Overview
 
-This project demonstrates how to securely deploy a Java-based Student Registration Web Application on Amazon Web Services (AWS) using a Reverse Proxy Architecture.
+This project demonstrates how to deploy a Java-based Student Registration Web Application on AWS using a Reverse Proxy Architecture.
 
-In many legacy systems, backend application servers are directly exposed to the internet, which creates serious security risks. To solve this problem, this project implements a reverse proxy architecture, where the backend application server is hidden from public access and all user requests pass through a proxy server.
+In many traditional systems, backend servers are directly exposed to the internet, which creates security risks. In this project, a reverse proxy server is used to forward client requests to the backend server while keeping the backend server protected.
 
-The reverse proxy forwards incoming HTTP requests to the backend application server while preventing direct access to the backend instance.
-
-This architecture improves:
-
-Security
-
-Scalability
-
-Traffic control
-
-Infrastructure management
-
-The application allows users to register student information through a web form, and the submitted data is stored in an Amazon RDS MySQL database.
+The backend application runs on Apache Tomcat, the proxy server runs Nginx, and the student data is stored in Amazon RDS MySQL.
 
 Architecture
+
 User Browser
-     │
-     ▼
+↓
 Reverse Proxy Server (Nginx)
-     │
-     ▼
-Backend Application Server (Apache Tomcat)
-     │
-     ▼
+↓
+Backend Server (Apache Tomcat)
+↓
 Amazon RDS MySQL Database
-Traffic Flow
 
-The user sends a request from the browser.
+Traffic Flow:
 
-The request reaches the Reverse Proxy Server (Nginx).
+User sends request from browser
 
-Nginx forwards the request to the Backend Tomcat Server.
+Request reaches Nginx reverse proxy
 
-The Java application processes the request.
+Nginx forwards request to backend Tomcat server
 
-Student registration data is stored in Amazon RDS MySQL database.
+Java application processes the request
 
-The response is returned back to the user through the proxy.
+Student data is stored in Amazon RDS database
 
-This architecture ensures the backend server is not directly exposed to the internet.
+Response is returned to the user
 
-AWS Services Used
-Amazon EC2
+Step 1 – EC2 Infrastructure Setup
 
-Two EC2 instances are used:
+Two EC2 instances were created.
 
-Backend Server
+Instance        	     Role                     	Access
+java-backend-server	     Tomcat Application Server	Private
+reverse-proxy-server	Nginx Reverse Proxy      	Public
 
-Runs Apache Tomcat
+The reverse proxy server receives requests from the internet and forwards them to the backend server.
 
-Hosts the Java .war application
+EC2 Instances Screenshot
 
-Accessible only internally
 
-Reverse Proxy Server
+<img width="1917" height="909" alt="intances" src="https://github.com/user-attachments/assets/d0bdfebb-b80c-4443-a028-ee4056f9d03f" />
 
-Runs Nginx
+Step 2 – Security Group Configuration
 
-Receives public HTTP requests
+Security groups were configured to secure the backend server.
 
-Forwards requests to backend server
+Backend Security Group Rules:
 
-Amazon RDS
+Port           	Description
+22	               SSH access
+8080	               Allowed only from Proxy Server
 
-Amazon RDS is used to host a MySQL database for storing student registration data.
+This ensures that users cannot access the backend server directly.
 
-Features used:
+Security Group Screenshot:
 
-Managed database service
+<img width="1920" height="1020" alt="instancesg" src="https://github.com/user-attachments/assets/00e94204-7f1d-4677-af5f-a3d7b947e109" />
 
-Secure networking
+backend security group
+<img width="1910" height="906" alt="backend sg" src="https://github.com/user-attachments/assets/dac1ca74-21a7-40cb-8e5d-adae3cb04811" />
 
-Reliable data storage
+Step 3 – Apache Tomcat Installation
 
-Security Groups
+Apache Tomcat was installed on the backend EC2 instance to host the Java application.
 
-Security groups are configured to control traffic.
-
-Proxy Security Group
-
-Allows HTTP (Port 80) from internet
-
-Backend Security Group
-
-Allows Port 8080 only from Proxy server
-
-This ensures direct backend access is blocked.
-
-Technologies Used
-
-Java
-
-Apache Tomcat
-
-Nginx Reverse Proxy
-
-MySQL
-
-Amazon Web Services (AWS)
-
-Application Access
-
-The application can be accessed through the reverse proxy using the following URL:
-
-http://<Proxy-Public-IP>/student
-
-Direct access to the backend server is restricted for security reasons.
-
-Infrastructure Setup
-Step 1 – Launch Backend EC2 Instance
-
-Create an EC2 instance that will host the Java application.
-
-Configuration:
-
-Name:
-
-java-backend-server
-
-Operating System:
-
-Amazon Linux 2
-
-Instance Type:
-
-t2.micro
-
-Security Group Rules:
-
-Type	Port	Source
-SSH	22	My IP
-Custom TCP	8080	Proxy Server
-Step 2 – Install Java
-
-Connect to the backend instance and install Java.
+Commands used:
 
 sudo yum update -y
 sudo yum install java-11-amazon-corretto -y
 
-Verify installation:
-
-java -version
-Step 3 – Install Apache Tomcat
-
-Download Apache Tomcat and extract it.
+Download and install Tomcat:
 
 cd /opt
 sudo wget https://downloads.apache.org/tomcat/tomcat-9/v9.0.89/bin/apache-tomcat-9.0.89.tar.gz
@@ -159,45 +84,67 @@ sudo mv apache-tomcat-9.0.89 tomcat
 Start Tomcat server:
 
 sudo /opt/tomcat/bin/startup.sh
+Tomcat Running Screenshot
+<img width="1920" height="1020" alt="tomcat" src="https://github.com/user-attachments/assets/a09c9e19-d0b5-4655-96e6-a1bf202cdfb6" />
 
-Test Tomcat:
-
-http://BACKEND-IP:8080
 Step 4 – Deploy Java Application
 
-Upload the student.war file to the Tomcat webapps directory.
+The Java web application (student.war) was deployed inside the Tomcat webapps directory.
 
 /opt/tomcat/webapps/
+Student Registration Form
+![Student Registration Form](screenshots/student-form.png)
 
-Once uploaded, Tomcat automatically deploys the application.
+<img width="1920" height="1020" alt="student registration form" src="https://github.com/user-attachments/assets/454f0814-b840-4b75-83d6-a0b4be73d045" />
+Step 5 – Student Data Submission
 
-Test the application:
+Users can enter student details in the form and submit them to the backend application.
 
-http://BACKEND-IP:8080/student
-Database Setup
-Step 5 – Create Amazon RDS Database
+Example fields:
 
-Navigate to:
+Student Name
 
-AWS Console → RDS → Create Database
+Student Address
+
+Student Age
+
+Qualification
+
+Percentage
+
+Year Passed
+
+Form Filled Screenshot:
+<img width="1919" height="966" alt="Screenshot 2026-03-12 153217" src="https://github.com/user-attachments/assets/c9551b13-0d79-4c40-916c-babd94757014" />
+
+
+
+Step 6 – Display Student Data
+
+After submission, the application retrieves the stored data from the database and displays it on the web page.
+
+Student List Screenshot
+
+<img width="1916" height="959" alt="student data fill" src="https://github.com/user-attachments/assets/27d65a7f-8113-41ea-9232-13fd0215f099" />
+
+Step 7 – Amazon RDS Database Setup
+
+Amazon RDS MySQL database was created to store the student data.
 
 Configuration:
 
-Engine:
+Engine: MySQL
+Instance Type: db.t3.micro
+Database Name: studentdb
 
-MySQL
+RDS Database Screenshot:
+<img width="1920" height="1020" alt="rds database" src="https://github.com/user-attachments/assets/239e83fb-223b-4152-836e-1934147f2bae" />
 
-Instance Type:
+Step 8 – Database Creation
 
-db.t3.micro
+The database and student table were created using SQL.
 
-Database Name:
-
-studentdb
-Step 6 – Create Database Table
-
-Connect to the database and create the student table.
-
+SQL Commands
 CREATE DATABASE studentdb;
 
 USE studentdb;
@@ -209,42 +156,37 @@ email VARCHAR(100),
 course VARCHAR(100),
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-Database Connector Setup
-Step 7 – Install MySQL Connector
+Database Creation Screenshot
+<img width="1625" height="967" alt="Screenshot 2026-03-12 152633" src="https://github.com/user-attachments/assets/8c43e763-973b-4439-9c32-9c8888e2fc9d" />
 
-Download MySQL connector for Java and place it in the Tomcat lib directory.
+Step 9 – Database Records
 
-Location:
+After submitting the form, the records are successfully stored in the MySQL database.
+
+MySQL Table Screenshot:
+
+<img width="1495" height="963" alt="mysdl db" src="https://github.com/user-attachments/assets/ed100e64-2e2e-4cae-834a-ec706ebffde0" />
+
+Step 10 – MySQL Connector Setup
+
+The MySQL JDBC connector was added to the Tomcat library directory to enable database connectivity.
+
+Path:
 
 /opt/tomcat/lib/
+MySQL Connector Screenshot:
 
-Restart Tomcat after placing the connector.
+<img width="1920" height="1020" alt="jar file" src="https://github.com/user-attachments/assets/89d4700e-8e23-4eff-b715-c9a39ba5c5b7" />
 
-Reverse Proxy Setup
-Step 8 – Launch Reverse Proxy EC2 Instance
+Step 11 – Reverse Proxy Configuration
 
-Create a second EC2 instance.
+Nginx was installed on the proxy server to forward traffic to the backend server.
 
-Name:
+Install nginx:
 
-reverse-proxy-server
-
-Security Group:
-
-Type	Port	Source
-SSH	22	My IP
-HTTP	80	0.0.0.0/0
-Step 9 – Install Nginx
 sudo yum install nginx -y
-sudo systemctl start nginx
-sudo systemctl enable nginx
-Step 10 – Configure Reverse Proxy
 
-Edit Nginx configuration file.
-
-sudo nano /etc/nginx/nginx.conf
-
-Add the following configuration:
+Configure reverse proxy:
 
 location /student {
 proxy_pass http://BACKEND_PRIVATE_IP:8080/student;
@@ -252,52 +194,35 @@ proxy_set_header Host $host;
 proxy_set_header X-Real-IP $remote_addr;
 }
 
-Restart Nginx:
+Restart nginx:
 
 sudo systemctl restart nginx
+Application Access
+
+Users access the application through the proxy server:
+
+http://13.208.241.151/student
+
+Direct access to the backend server is blocked.
+
 Security Implementation
 
-To improve security:
+Security improvements implemented:
 
-Backend server is not publicly accessible
+Backend server not publicly accessible
 
-Only proxy server can access port 8080
+Reverse proxy controls incoming traffic
 
-Security groups restrict traffic flow
+Security groups restrict direct access
 
-This ensures secure communication between components.
+Database secured inside AWS network
 
-Features
-
-Reverse proxy architecture
-
-Secure backend server
-
-Java web application deployment
-
-AWS cloud infrastructure
-
-Database integration
-
-Controlled traffic routing
-
-Project Outcome
-
-After completing the deployment:
-
-Users can access the application through the proxy server.
-
-Student registration data is successfully stored in the database.
-
-Backend server remains secure and inaccessible from the internet.
-
-Application URL:
-
-http://<Proxy-Public-IP>/student
 Conclusion
 
-This project demonstrates how to deploy a secure cloud-based web application using AWS infrastructure.
+This project demonstrates secure deployment of a Java web application using a reverse proxy architecture on AWS.
 
-By implementing a reverse proxy architecture, the backend application server is protected from direct exposure, improving overall system security.
+By using Nginx as a reverse proxy, the backend application server remains protected while still allowing users to access the application through the proxy server.
 
-This setup is commonly used in real-world production environments for hosting scalable and secure applications.
+This architecture is widely used in real-world production environments for improved security and scalability.
+
+

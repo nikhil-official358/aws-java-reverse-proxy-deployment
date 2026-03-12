@@ -96,6 +96,7 @@ Student Registration Form
 ![Student Registration Form](screenshots/student-form.png)
 
 <img width="1920" height="1020" alt="student registration form" src="https://github.com/user-attachments/assets/454f0814-b840-4b75-83d6-a0b4be73d045" />
+
 # Step 5 – Student Data Submission
 
 Users can enter student details in the form and submit them to the backend application.
